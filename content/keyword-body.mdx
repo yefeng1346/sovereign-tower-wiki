@@ -1,0 +1,43 @@
+export function KeywordBody({ page, locale = "en" }) {
+  const labels = {
+    en: { direct: "Direct answer", confirm: "What the sources confirm", use: "How to use this information", why: "Why this query matters", filter: "Source filter", note: "Evidence note", sources: "Sources", checked: "Last checked", version: "Patch 1.0.8", caveat: "Community routes, exact values and live platform data can change by build." },
+    ja: { direct: "直接回答", confirm: "出典が確認すること", use: "この情報の使い方", why: "この検索が重要な理由", filter: "出典フィルター", note: "証拠メモ", sources: "出典", checked: "最終確認", version: "PATCH 1.0.8", caveat: "コミュニティのルート、正確な数値、ライブのプラットフォーム情報はビルドで変わる可能性があります。" },
+    ko: { direct: "직접 답변", confirm: "출처가 확인하는 내용", use: "이 정보를 사용하는 방법", why: "이 검색이 중요한 이유", filter: "출처 필터", note: "근거 메모", sources: "출처", checked: "최종 확인", version: "PATCH 1.0.8", caveat: "커뮤니티 경로, 정확한 값과 실시간 플랫폼 정보는 빌드에 따라 달라질 수 있습니다." },
+    fr: { direct: "Réponse directe", confirm: "Ce que confirment les sources", use: "Comment utiliser cette information", why: "Pourquoi cette recherche compte", filter: "Filtre des sources", note: "Note de preuve", sources: "Sources", checked: "Dernière vérification", version: "PATCH 1.0.8", caveat: "Les routes communautaires, valeurs exactes et données de plateforme en direct peuvent changer selon la version." },
+  }[locale];
+  return (
+    <>
+      <div className="direct-answer hud-frame">
+        <span className="kicker">{labels.direct}</span>
+        <p>{page.answer}</p>
+        <div className={`evidence-badge evidence-${page.evidence}`}><span>{page.evidenceLabel}</span><small>{page.evidenceDescription}</small></div>
+      </div>
+      <section>
+        <h2>{labels.confirm}</h2>
+        <p>{page.confirmed}</p>
+      </section>
+      <section>
+        <h2>{labels.use}</h2>
+        <p>{page.workflow}</p>
+      </section>
+      <section>
+        <h2>{labels.why}</h2>
+        <p>{page.context}</p>
+      </section>
+      <section>
+        <h2>{labels.filter}</h2>
+        <p>{page.sourceSummary}</p>
+      </section>
+      <div className="evidence-note">
+        <span className="kicker">{labels.note}</span>
+        <p>{labels.checked}: {page.lastChecked} · {labels.version}. {labels.caveat}</p>
+      </div>
+      <section>
+        <h2>{labels.sources}</h2>
+        <ul className="source-list">
+          {page.sources.map((item, index) => <li key={item.url}><a href={item.url} target="_blank" rel="noreferrer">{page.sourceLabels?.[index] ?? item.label} <span aria-hidden="true">↗</span></a></li>)}
+        </ul>
+      </section>
+    </>
+  );
+}

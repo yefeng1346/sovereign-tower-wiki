@@ -1,0 +1,22 @@
+{
+  "name": "Sovereign Tower Wiki",
+  "short_name": "Sovereign Tower",
+  "description": "A fan-made field codex for Sovereign Tower Knights, quests and time-rewind choices.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ef",
+  "theme_color": "#8f4b5b",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
