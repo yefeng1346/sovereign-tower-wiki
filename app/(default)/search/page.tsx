@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { SiteShell } from "@/components/site";
 import { SearchView } from "@/components/site-extra";
-import { pageAlternates } from "@/lib/site-seo";
+import { pageMetadata } from "@/lib/site-seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  locale: "en",
+  path: "/search",
   title: "Search Sovereign Tower guides and answers",
   description: "Search Sovereign Tower guides by Knight, quest, platform, system, romance, update and community question.",
-  robots: { index: false, follow: true },
-  alternates: pageAlternates("en", "/search"),
-};
+  noindex: true,
+});
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;

@@ -4,7 +4,7 @@ import { SiteShell } from "@/components/site";
 import { FactionTrackerTool } from "@/components/tools";
 import { StructuredData } from "@/components/structured-data";
 import { locales, type Locale } from "@/lib/site-data";
-import { absoluteUrl, pageAlternates, localizedPath } from "@/lib/site-seo";
+import { absoluteUrl, localizedPath, pageMetadata } from "@/lib/site-seo";
 import { toolCopy } from "@/lib/localized-content";
 
 export function generateStaticParams() {
@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const current = locale in toolCopy ? toolCopy[locale as Locale] : toolCopy.en;
-  return { title: `Sovereign Tower ${current.factionTracker} — ${current.localNotes}`, description: current.trackerPageDescription, robots: { index: false, follow: true }, alternates: pageAlternates(locale as Locale, "/tools/faction-tracker") };
+  return pageMetadata({ locale: locale as Locale, path: "/tools/faction-tracker", title: `Sovereign Tower ${current.factionTracker} — ${current.localNotes}`, description: current.trackerPageDescription, noindex: true });
 }
 
 export default async function LocalizedFactionTrackerPage({ params }: { params: Promise<{ locale: string }> }) {

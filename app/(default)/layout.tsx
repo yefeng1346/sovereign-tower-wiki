@@ -1,16 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { seo } from "@/lib/site-data";
-import { absoluteUrl, languageAlternates, siteIdentity, siteUrl } from "@/lib/site-seo";
-import "./globals.css";
+import { absoluteUrl, languageAlternates, siteIdentity, siteMetadataBase, siteUrl } from "@/lib/site-seo";
+import "../globals.css";
 
 export const metadata: Metadata = {
+  ...siteMetadataBase,
   title: seo.en.title,
   description: seo.en.description,
   keywords: [...seo.en.keywords],
-  applicationName: "Sovereign Tower Wiki",
-  authors: [{ name: "Sovereign Tower Wiki" }],
-  creator: "Sovereign Tower Wiki",
-  publisher: "Sovereign Tower Wiki",
   metadataBase: siteUrl,
   alternates: { canonical: absoluteUrl("/"), languages: languageAlternates("/") },
   manifest: "/site.webmanifest",

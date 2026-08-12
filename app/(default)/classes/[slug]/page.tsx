@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import { ArticleView, CategoryDetailView, SiteShell } from "@/components/site";
-import BeginnerGuide from "../../../content/guides/beginner-guide.mdx";
-import AchievementsGuide from "../../../content/guides/achievements.mdx";
-import PatchNotes from "../../../content/guides/patch-1-0-8.mdx";
+import BeginnerGuide from "../../../../content/guides/beginner-guide.mdx";
+import AchievementsGuide from "../../../../content/guides/achievements.mdx";
+import PatchNotes from "../../../../content/guides/patch-1-0-8.mdx";
 import { categories, guideMeta } from "@/lib/site-data";
-import SystemRequirements from "../../../content/guides/system-requirements.mdx";
-import QuestMatchingGuide from "../../../content/guides/quest-matching.mdx";
-import { pageAlternates } from "@/lib/site-seo";
+import SystemRequirements from "../../../../content/guides/system-requirements.mdx";
+import QuestMatchingGuide from "../../../../content/guides/quest-matching.mdx";
+import { pageMetadata } from "@/lib/site-seo";
 
 export function generateStaticParams() {
   return [{ slug: "quest-matching" }, { slug: "beginner-guide" }, { slug: "patch-1-0-8" }, { slug: "achievements" }, { slug: "system-requirements" }, ...categories.filter((category) => category.slug !== "quests").map((category) => ({ slug: category.slug }))];
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const guide = guideMeta[slug as keyof typeof guideMeta];
   const category = categories.find((item) => item.slug === slug);
-  if (guide) return { title: `${guide.title} — Sovereign Tower Wiki`, description: guide.description, alternates: pageAlternates("en", `/classes/${slug}`) };
-  return category ? { title: `${category.title} — Sovereign Tower Wiki`, description: category.description, alternates: pageAlternates("en", `/classes/${slug}`) } : {};
+  if (guide) return pageMetadata({ locale: "en", path: `/classes/${slug}`, title: `${guide.title} — Sovereign Tower Wiki`, description: guide.description, type: "article" });
+  return category ? pageMetadata({ locale: "en", path: `/classes/${slug}`, title: `${category.title} — Sovereign Tower Wiki`, description: category.description, type: "article" }) : {};
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {

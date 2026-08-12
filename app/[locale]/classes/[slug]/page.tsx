@@ -7,7 +7,7 @@ import { categories, guideMeta, locales, type Locale } from "@/lib/site-data";
 import SystemRequirements from "../../../../content/guides/system-requirements.mdx";
 import QuestMatchingGuide from "../../../../content/guides/quest-matching.mdx";
 import type { Metadata } from "next";
-import { pageAlternates } from "@/lib/site-seo";
+import { pageMetadata } from "@/lib/site-seo";
 import { LocalizedGuideContent } from "../../../../content/guides/localized-guides";
 import { localizedCategory, localizedGuideMeta } from "@/lib/localized-content";
 
@@ -22,9 +22,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const category = localizedCategory(locale as Locale, slug);
   if (guide) {
     const localizedGuide = localizedGuideMeta(locale as Locale, slug as keyof typeof guideMeta);
-    return { title: `${localizedGuide.title} — Sovereign Tower Wiki`, description: localizedGuide.description, alternates: pageAlternates(locale as Locale, `/classes/${slug}`) };
+    return pageMetadata({ locale: locale as Locale, path: `/classes/${slug}`, title: `${localizedGuide.title} — Sovereign Tower Wiki`, description: localizedGuide.description, type: "article" });
   }
-  return category ? { title: `${category.title} — Sovereign Tower Wiki`, description: category.description, alternates: pageAlternates(locale as Locale, `/classes/${slug}`) } : {};
+  return category ? pageMetadata({ locale: locale as Locale, path: `/classes/${slug}`, title: `${category.title} — Sovereign Tower Wiki`, description: category.description, type: "article" }) : {};
 }
 
 export default async function LocalizedArticle({ params }: { params: Promise<{ locale: string; slug: string }> }) {
