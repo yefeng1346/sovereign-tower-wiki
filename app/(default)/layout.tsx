@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { seo } from "@/lib/site-data";
 import { absoluteUrl, languageAlternates, siteIdentity, siteMetadataBase, siteUrl } from "@/lib/site-seo";
 import "../globals.css";
@@ -29,5 +30,5 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body>{children}<GoogleAnalytics /></body></html>;
 }

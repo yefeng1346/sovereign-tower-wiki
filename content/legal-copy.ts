@@ -20,7 +20,7 @@ const english: LegalCopy = {
     sections: [
       { heading: "Information the site handles", body: "The search form places your query in the page URL so the site can show matching field files. The Faction Tracker stores notes in your browser's local storage; this project does not send those notes to a site database." },
       { heading: "Hosting and external services", body: "The hosting provider may process ordinary request data needed to deliver and protect the site. Links to Steam, Discord, YouTube and the official developer or publisher pages leave this site and are governed by those services' own policies." },
-      { heading: "Cookies and future features", body: "This project does not require a login and no advertising or marketing cookies are configured in the site code. If a future release adds analytics, forms, accounts or cookies, this page must be updated before that feature is used." },
+      { heading: "Analytics, cookies and future features", body: "This site uses Google Analytics 4 to measure aggregate page visits and navigation. The Google tag may use first-party cookies or similar identifiers; Google describes how Analytics uses these identifiers in its privacy documentation. This project does not require a login and does not configure advertising or marketing features. If a future release adds forms, accounts or new tracking, this page must be updated before that feature is used." },
       { heading: "Changes", body: "This notice may be updated when the site's features or data practices change. The date above identifies the current site snapshot." },
     ],
   },
@@ -46,7 +46,7 @@ const localized: Record<Exclude<Locale, "en">, LegalCopy> = {
       sections: [
         { heading: "サイトが扱う情報", body: "検索フォームは一致するフィールドページを表示するため、検索語をページ URL に入れます。派閥トラッカーのメモはブラウザのローカルストレージに保存され、現在の実装ではサイトのデータベースへ送信されません。" },
         { heading: "ホスティングと外部サービス", body: "ホスティング事業者は、サイトの配信と保護に必要な通常のリクエスト情報を処理する場合があります。Steam、Discord、YouTube、開発元・パブリッシャーへのリンクを開くと外部サービスへ移動し、それぞれのポリシーが適用されます。" },
-        { heading: "Cookie と今後の機能", body: "ログインは必要なく、サイトコードには広告用・マーケティング用 Cookie を設定していません。将来、アクセス解析、フォーム、アカウント、Cookie を追加する場合は、その機能を使う前にこのページを更新します。" },
+        { heading: "アクセス解析、Cookie と今後の機能", body: "このサイトでは、ページ訪問とナビゲーションの全体的な傾向を測定するため Google Analytics 4 を使用しています。Google タグはファーストパーティ Cookie または類似識別子を使用する場合があります。ログインは必要なく、広告用・マーケティング用の機能は設定していません。将来、フォーム、アカウントまたは新しい計測機能を追加する場合は、使用前にこのページを更新します。" },
         { heading: "変更", body: "サイトの機能やデータの扱いが変わった場合、この案内を更新することがあります。上の日付は現在のサイトスナップショットを示します。" },
       ],
     },
@@ -70,7 +70,7 @@ const localized: Record<Exclude<Locale, "en">, LegalCopy> = {
       sections: [
         { heading: "사이트가 처리하는 정보", body: "검색 양식은 일치하는 필드 파일을 보여주기 위해 검색어를 페이지 URL에 넣습니다. 세력 추적기 메모는 브라우저의 로컬 저장소에 보관되며, 현재 구현에서는 사이트 데이터베이스로 전송되지 않습니다." },
         { heading: "호스팅과 외부 서비스", body: "호스팅 제공업체는 사이트 제공과 보호에 필요한 일반 요청 정보를 처리할 수 있습니다. Steam, Discord, YouTube와 공식 개발사·배급사 링크를 열면 해당 외부 서비스로 이동하며 각 서비스의 정책이 적용됩니다." },
-        { heading: "쿠키와 향후 기능", body: "로그인이 필요하지 않으며 사이트 코드에는 광고 또는 마케팅 쿠키가 설정되어 있지 않습니다. 향후 분석, 양식, 계정 또는 쿠키를 추가한다면 해당 기능을 사용하기 전에 이 페이지를 업데이트합니다." },
+        { heading: "분석, 쿠키와 향후 기능", body: "이 사이트는 페이지 방문과 탐색의 전체적인 흐름을 측정하기 위해 Google Analytics 4를 사용합니다. Google 태그는 퍼스트 파티 쿠키 또는 유사 식별자를 사용할 수 있습니다. 로그인이 필요하지 않으며 광고 또는 마케팅 기능은 설정하지 않았습니다. 향후 양식, 계정 또는 새로운 측정 기능을 추가한다면 사용 전에 이 페이지를 업데이트합니다." },
         { heading: "변경 사항", body: "사이트 기능이나 데이터 처리 방식이 바뀌면 이 안내를 업데이트할 수 있습니다. 위 날짜는 현재 사이트 스냅샷을 나타냅니다." },
       ],
     },
@@ -94,7 +94,7 @@ const localized: Record<Exclude<Locale, "en">, LegalCopy> = {
       sections: [
         { heading: "Informations traitées par le site", body: "Le formulaire de recherche place la requête dans l'URL afin d'afficher les fichiers correspondants. Le Suivi des factions conserve les notes dans le stockage local du navigateur ; dans l'implémentation actuelle, ces notes ne sont pas envoyées à une base de données du site." },
         { heading: "Hébergement et services externes", body: "L'hébergeur peut traiter les données ordinaires d'une requête nécessaires à la diffusion et à la protection du site. Les liens vers Steam, Discord, YouTube et les pages officielles du développeur ou de l'éditeur ouvrent des services externes soumis à leurs propres politiques." },
-        { heading: "Cookies et fonctionnalités futures", body: "Aucune connexion n'est nécessaire et le code du site ne configure pas de cookies publicitaires ou marketing. Si une future version ajoute des statistiques, des formulaires, des comptes ou des cookies, cette page devra être mise à jour avant leur utilisation." },
+        { heading: "Statistiques, cookies et fonctionnalités futures", body: "Ce site utilise Google Analytics 4 pour mesurer les visites et la navigation de manière agrégée. La balise Google peut utiliser des cookies propriétaires ou des identifiants similaires ; Google décrit cet usage dans sa documentation de confidentialité. Aucune connexion n'est nécessaire et aucune fonctionnalité publicitaire ou marketing n'est configurée. Si une future version ajoute des formulaires, des comptes ou une nouvelle mesure, cette page devra être mise à jour avant son utilisation." },
         { heading: "Modifications", body: "Cette notice peut être mise à jour lorsque les fonctionnalités ou les pratiques de données du site changent. La date ci-dessus identifie l'instantané actuel du site." },
       ],
     },

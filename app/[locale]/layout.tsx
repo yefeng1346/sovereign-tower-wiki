@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { locales, seo, type Locale } from "@/lib/site-data";
 import { absoluteUrl, languageAlternates, localizedPath, siteIdentity, siteMetadataBase } from "@/lib/site-seo";
 import "../globals.css";
@@ -23,5 +24,5 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function LocalizedLayout({ children, params }: Readonly<{ children: React.ReactNode; params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
-  return <html lang={locales.includes(locale as Locale) ? locale : "en"}><body>{children}</body></html>;
+  return <html lang={locales.includes(locale as Locale) ? locale : "en"}><body>{children}<GoogleAnalytics /></body></html>;
 }
