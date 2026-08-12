@@ -1,5 +1,6 @@
 export type KeywordSource = { label: string; url: string };
 export type EvidenceLevel = "official" | "tested" | "community" | "not-announced" | "mixed";
+export type AnswerType = "confirmed" | "tested-route" | "community-lead" | "not-announced" | "no-universal-answer" | "source-conflict";
 
 type KeywordDraft = {
   keyword: string;
@@ -19,6 +20,7 @@ export type KeywordPage = KeywordDraft & {
   title: string;
   description: string;
   evidence: EvidenceLevel;
+  answerType: AnswerType;
   evidenceLabel: string;
   evidenceDescription: string;
   indexable: boolean;
@@ -82,9 +84,53 @@ const evidenceByKeyword: Partial<Record<string, EvidenceLevel>> = {
   "Sovereign Tower Discord invite link": "official",
 };
 
+const answerTypeByKeyword: Partial<Record<string, AnswerType>> = {
+  "Sovereign Tower guide": "no-universal-answer",
+  "Sovereign Tower walkthrough": "no-universal-answer",
+  "Sovereign Tower wiki": "no-universal-answer",
+  "Sovereign Tower wit guide": "no-universal-answer",
+  "Sovereign Tower characters": "no-universal-answer",
+  "Sovereign Tower knights": "no-universal-answer",
+  "Sovereign Tower Goberto": "tested-route",
+  "Sovereign Tower Victoria": "community-lead",
+  "Sovereign Tower Brunhilda": "tested-route",
+  "Sovereign Tower Angelica": "community-lead",
+  "Sovereign Tower Gideon": "community-lead",
+  "Sovereign Tower how to get Chester": "tested-route",
+  "Sovereign Tower Silgur": "community-lead",
+  "Sovereign Tower Taric": "confirmed",
+  "Sovereign Tower romance": "no-universal-answer",
+  "Sovereign Tower gender": "confirmed",
+  "Sovereign Tower murder": "community-lead",
+  "Sovereign Tower endings": "no-universal-answer",
+  "Sovereign Tower Gideon death": "no-universal-answer",
+  "Sovereign Tower my knight was assassinated": "community-lead",
+  "Sovereign Tower will there be consequences using demon powers": "no-universal-answer",
+  "Sovereign Tower unexpected outcomes": "community-lead",
+  "Sovereign Tower how many acts": "confirmed",
+  "Sovereign Tower who to accuse": "no-universal-answer",
+  "Sovereign Tower Goose": "community-lead",
+  "Sovereign Tower Steam": "confirmed",
+  "Sovereign Tower release date": "confirmed",
+  "Sovereign Tower PS5": "not-announced",
+  "Sovereign Tower Switch": "not-announced",
+  "Sovereign Tower demo": "confirmed",
+  "Sovereign Tower download": "confirmed",
+  "Sovereign Tower itch.io": "confirmed",
+  "Sovereign Tower Mac": "source-conflict",
+  "Sovereign Tower cost": "confirmed",
+  "Sovereign Tower forge": "confirmed",
+  "Sovereign Tower sovereign mode": "tested-route",
+  "Sovereign Tower cheats": "not-announced",
+  "Sovereign Tower review": "community-lead",
+  "Sovereign Tower Reddit": "community-lead",
+  "Sovereign Tower Discord invite link": "confirmed",
+};
+
 const noindexKeywords = new Set([
   "Sovereign Tower Taric",
   "Sovereign Tower Reddit",
+  "Sovereign Tower who to accuse",
 ]);
 
 const source = (label: string, url: string): KeywordSource => ({ label, url });
@@ -131,14 +177,15 @@ function slugify(keyword: string) {
 }
 
 function seoTitle(keyword: string) {
-  // This query is 61 characters before adding any title suffix. Keep its
-  // complete wording in the H1 and description, while using a compact SEO
-  // title that preserves the same search intent inside the requested range.
+  // Keep every title in the requested 40–60 character range. The one query
+  // longer than 60 characters gets a compact title, while the full wording
+  // remains in the H1, answer and meta description.
   if (keyword.length > 60) return "Sovereign Tower consequences using demon powers — guide";
   const candidates = [
-    `${keyword} — confirmed facts and guide`,
-    `${keyword} — what players can verify`,
     `${keyword} — facts and current status`,
+    `${keyword} — what players can verify`,
+    `${keyword} — confirmed facts`,
+    `${keyword} — guide and facts`,
     `${keyword} — guide`,
   ];
   return candidates.find((candidate) => candidate.length >= 40 && candidate.length <= 60) ?? keyword;
@@ -154,8 +201,8 @@ function seoDescription(keyword: string, text: string) {
 
 function publicText(text: string) {
   return text
-    .replaceAll("待确认", "not fully documented")
-    .replaceAll("待确认 details", "unverified details");
+    .replaceAll("待确认 details", "unverified details")
+    .replaceAll("待确认", "not fully documented");
 }
 
 function makePage(draft: KeywordDraft): KeywordPage {
@@ -163,20 +210,26 @@ function makePage(draft: KeywordDraft): KeywordPage {
   const confirmed = publicText(draft.confirmed);
   const workflow = publicText(draft.workflow);
   const context = publicText(draft.context);
+  const pending = publicText(draft.pending);
+  const revisit = publicText(draft.revisit);
   const sourceSummary = publicText(draft.sourceSummary);
+  const evidence = evidenceByKeyword[draft.keyword] ?? "community";
   return {
     ...draft,
     answer,
     confirmed,
     workflow,
     context,
+    pending,
+    revisit,
     sourceSummary,
     slug: slugify(draft.keyword),
     title: seoTitle(draft.keyword),
     description: seoDescription(draft.keyword, answer),
-    evidence: evidenceByKeyword[draft.keyword] ?? "community",
-    evidenceLabel: evidenceLabels[evidenceByKeyword[draft.keyword] ?? "community"].label,
-    evidenceDescription: evidenceLabels[evidenceByKeyword[draft.keyword] ?? "community"].description,
+    evidence,
+    answerType: answerTypeByKeyword[draft.keyword] ?? (evidence === "official" ? "confirmed" : evidence === "tested" ? "tested-route" : evidence === "not-announced" ? "not-announced" : "community-lead"),
+    evidenceLabel: evidenceLabels[evidence].label,
+    evidenceDescription: evidenceLabels[evidence].description,
     indexable: !noindexKeywords.has(draft.keyword),
     lastChecked: researchSnapshot.date,
   };
@@ -460,8 +513,8 @@ const drafts: KeywordDraft[] = [
   },
   {
     keyword: "Sovereign Tower Steam", category: "platforms & availability",
-    answer: "Sovereign Tower is currently listed on Steam for Windows and SteamOS/Linux. The current Steam snapshot shows Very Positive with 90% positive ratings from 1,153 user reviews; that number is dynamic. Mac, PS5 and Switch support should be checked separately because the collected sources do not provide one consistent platform statement.",
-    confirmed: "The official Steam store lists Windows and SteamOS + Linux, six supported interface/subtitle languages and 75 achievements. Steam's live snapshot shows 90% positive from 1,153 reviews on August 12, 2026. A separate SteamDB report mentions Steam Deck Verified, but the live store remains the purchase source of truth.",
+    answer: "Sovereign Tower is currently listed on Steam for Windows and SteamOS/Linux. The Steam store currently labels the user rating Very Positive, but review totals and percentages change over time. Mac, PS5 and Switch support should be checked separately because the collected official pages do not give one consistent platform statement.",
+    confirmed: "The official Steam store lists Windows and SteamOS + Linux, six supported interface/subtitle languages and 75 achievements. The current store also provides the live price, system requirements and Demo link; these are dynamic and should be checked before purchase.",
     workflow: "Use the Steam page for the current store button, system requirements, price and language display. Use the Wild Wits page for official developer context and the community hub for announcements. Do not copy a regional price or platform statement without checking the target storefront.",
     context: "The Steam query is both an availability and a source-of-truth page. It should lead players to the official store instead of third-party downloads. Platform questions such as Mac, PS5 and Switch need separate pages because the evidence differs by platform.",
     pending: "The current regional price, future ports and any platform changes remain time-sensitive. The official Wild Wits page conflicts with Steam on macOS, but the developer response and current Steam listing do not support native Mac. PS5, Xbox, Switch and Switch 2 remain unannounced.",
@@ -592,11 +645,11 @@ const drafts: KeywordDraft[] = [
   },
   {
     keyword: "Sovereign Tower review", category: "community & reviews",
-    answer: "The current Steam snapshot is Very Positive: 90% of 1,153 user reviews are positive as checked on August 12, 2026. PC Gamer's formal-release review and Steam's 87 Metacritic display are separate editorial snapshots. Coverage praises the writing, hand-drawn style, choices and time rewind, while noting that dispatch management and repeated rewinds can affect pacing.",
+    answer: "The Steam store currently labels Sovereign Tower Very Positive, but its displayed review total changes. PC Gamer's formal-release review and Steam's 87 Metacritic display are separate editorial snapshots. Coverage praises the writing, hand-drawn style, choices and time rewind, while noting that dispatch management and repeated rewinds can affect pacing.",
     confirmed: "PC Gamer's formal-release review discusses Luck, Knight preferences, murder, Act progression and time rewind. The official launch material also quotes other media scores, but those should remain attributed to their original outlets. Steam user totals are live and dynamic, so this page uses the current store snapshot rather than an older rounded figure.",
     workflow: "Use review pages to explain what the game feels like, not to turn one score into an objective verdict. Separate media scores from Steam user ratings and include their source/date. For SEO copy, summarize the shared themes and keep numerical review values time-stamped.",
     context: "The game's cozy presentation and ruthless choices are a recurring contrast in the coverage. That contrast helps readers understand the management-RPG tone before buying. It does not prove that every player will share the same pacing experience.",
-    pending: "The current Steam rating, exact review count, long-term performance and regional review differences are time-sensitive. The 90% / 1,153 values are a retrieval snapshot, not permanent facts. Do not present them without a date or a live-store caveat.",
+    pending: "The current Steam rating, exact review count, long-term performance and regional review differences are time-sensitive. Do not present a live-store number without a retrieval date or a direct link to Steam.",
     revisit: "Recheck Steam for user-review totals and link the original media pages for quoted scores. Keep old launch scores labelled as launch coverage. If the consensus changes, update the summary rather than preserving a stale rating.",
     sourceSummary: "The review conclusion is based on PC Gamer, DigitalChumps, Steam's user-review page and the official launch announcement's media roundup. The common themes are stronger than any single score. Dynamic numbers remain date-dependent.",
     sources: [source("PC Gamer formal-release review", sourceUrls.pcGamerReview), source("DigitalChumps impressions", sourceUrls.digitalChumps), source("Steam user reviews", sourceUrls.steam), source("Official launch announcement", sourceUrls.steamCommunity)],
@@ -615,7 +668,7 @@ const drafts: KeywordDraft[] = [
   {
     keyword: "Sovereign Tower Discord invite link", category: "community & reviews",
     answer: "The official community invite recorded in the collected material is https://discord.gg/w4XVQ69Vuc. Steam or SteamDB lists it as a game social channel, and Discord Discovery identifies the corresponding Sovereign Tower server. Invite links can expire or change, so the live link should be tested before publishing.",
-    confirmed: "The research cross-checks the invite through SteamDB and Discord Discovery. The server page identifies it as the official Sovereign Tower server and the supplied snapshot records 4,052 members and 1,257 online. Those counts are live community metrics and should be dated.",
+    confirmed: "The research cross-checks the invite through SteamDB and Discord Discovery. The server page identifies it as the Sovereign Tower server; membership and online counts are live community metrics and are intentionally not hardcoded.",
     workflow: "Use the invite link as the primary community CTA and keep the Discord Discovery page as a secondary verification link. Open it in a new tab and do not ask users for private credentials. If the invite stops working, update the page from the official Steam or Discord listing.",
     context: "The Discord page is a community access answer, not a game mechanic guide. It belongs in the footer and community navigation because the server can surface current patch and player questions. The invitation itself is the only code-like string supported by the source, and it is a link rather than a game redemption code.",
     pending: "The current member count, online count, full channel structure and future invite validity are time-sensitive or 待确认. The supplied public page confirms broad tags but not every channel. Do not add another unofficial Discord link or hardcode the counts permanently.",
@@ -627,3 +680,39 @@ const drafts: KeywordDraft[] = [
 
 export const keywordPages = drafts.map(makePage);
 export const keywordPageMap = Object.fromEntries(keywordPages.map((page) => [page.slug, page])) as Record<string, KeywordPage>;
+
+const relatedKeywordNames: Record<string, string[]> = {
+  "Sovereign Tower guide": ["Sovereign Tower walkthrough", "Sovereign Tower wit guide", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower walkthrough": ["Sovereign Tower guide", "Sovereign Tower how many acts", "Sovereign Tower Goose"],
+  "Sovereign Tower wiki": ["Sovereign Tower characters", "Sovereign Tower knights", "Sovereign Tower guide"],
+  "Sovereign Tower wit guide": ["Sovereign Tower unexpected outcomes", "Sovereign Tower guide", "Sovereign Tower knights"],
+  "Sovereign Tower characters": ["Sovereign Tower knights", "Sovereign Tower romance", "Sovereign Tower Gideon"],
+  "Sovereign Tower knights": ["Sovereign Tower characters", "Sovereign Tower guide", "Sovereign Tower Goose"],
+  "Sovereign Tower how to get Chester": ["Sovereign Tower Goose", "Sovereign Tower Angelica", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower Goose": ["Sovereign Tower how to get Chester", "Sovereign Tower Angelica", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower Angelica": ["Sovereign Tower Goose", "Sovereign Tower how to get Chester", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower Gideon": ["Sovereign Tower Gideon death", "Sovereign Tower characters", "Sovereign Tower murder"],
+  "Sovereign Tower murder": ["Sovereign Tower who to accuse", "Sovereign Tower Gideon death", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower endings": ["Sovereign Tower Gideon death", "Sovereign Tower murder", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower unexpected outcomes": ["Sovereign Tower guide", "Sovereign Tower Goose", "Sovereign Tower will there be consequences using demon powers"],
+  "Sovereign Tower will there be consequences using demon powers": ["Sovereign Tower unexpected outcomes", "Sovereign Tower sovereign mode", "Sovereign Tower endings"],
+  "Sovereign Tower how many acts": ["Sovereign Tower walkthrough", "Sovereign Tower guide", "Sovereign Tower demo"],
+  "Sovereign Tower demo": ["Sovereign Tower download", "Sovereign Tower release date", "Sovereign Tower Steam"],
+  "Sovereign Tower Steam": ["Sovereign Tower release date", "Sovereign Tower Mac", "Sovereign Tower demo"],
+  "Sovereign Tower Mac": ["Sovereign Tower Steam", "Sovereign Tower PS5", "Sovereign Tower Switch"],
+  "Sovereign Tower cost": ["Sovereign Tower Steam", "Sovereign Tower download", "Sovereign Tower release date"],
+  "Sovereign Tower forge": ["Sovereign Tower sovereign mode", "Sovereign Tower guide", "Sovereign Tower Steam"],
+  "Sovereign Tower sovereign mode": ["Sovereign Tower forge", "Sovereign Tower will there be consequences using demon powers", "Sovereign Tower unexpected outcomes"],
+  "Sovereign Tower review": ["Sovereign Tower Steam", "Sovereign Tower demo", "Sovereign Tower guide"],
+  "Sovereign Tower Discord invite link": ["Sovereign Tower Steam", "Sovereign Tower review", "Sovereign Tower Reddit"],
+};
+
+export function relatedKeywordPages(page: KeywordPage) {
+  const byKeyword = new Map(keywordPages.map((candidate) => [candidate.keyword, candidate]));
+  const preferred = (relatedKeywordNames[page.keyword] ?? []).map((keyword) => byKeyword.get(keyword));
+  const fallback = keywordPages.filter((candidate) => candidate.category === page.category && candidate.slug !== page.slug && candidate.indexable);
+  return [...preferred, ...fallback]
+    .filter((candidate): candidate is KeywordPage => Boolean(candidate?.indexable && candidate.slug !== page.slug))
+    .filter((candidate, index, items) => items.findIndex((item) => item.slug === candidate.slug) === index)
+    .slice(0, 3);
+}

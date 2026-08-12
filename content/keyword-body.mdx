@@ -1,9 +1,9 @@
 export function KeywordBody({ page, locale = "en" }) {
   const labels = {
-    en: { direct: "Direct answer", confirm: "What the sources confirm", use: "How to use this information", why: "Why this query matters", filter: "Source filter", note: "Evidence note", sources: "Sources", checked: "Last checked", version: "Patch 1.0.8", caveat: "Community routes, exact values and live platform data can change by build." },
-    ja: { direct: "直接回答", confirm: "出典が確認すること", use: "この情報の使い方", why: "この検索が重要な理由", filter: "出典フィルター", note: "証拠メモ", sources: "出典", checked: "最終確認", version: "PATCH 1.0.8", caveat: "コミュニティのルート、正確な数値、ライブのプラットフォーム情報はビルドで変わる可能性があります。" },
-    ko: { direct: "직접 답변", confirm: "출처가 확인하는 내용", use: "이 정보를 사용하는 방법", why: "이 검색이 중요한 이유", filter: "출처 필터", note: "근거 메모", sources: "출처", checked: "최종 확인", version: "PATCH 1.0.8", caveat: "커뮤니티 경로, 정확한 값과 실시간 플랫폼 정보는 빌드에 따라 달라질 수 있습니다." },
-    fr: { direct: "Réponse directe", confirm: "Ce que confirment les sources", use: "Comment utiliser cette information", why: "Pourquoi cette recherche compte", filter: "Filtre des sources", note: "Note de preuve", sources: "Sources", checked: "Dernière vérification", version: "PATCH 1.0.8", caveat: "Les routes communautaires, valeurs exactes et données de plateforme en direct peuvent changer selon la version." },
+    en: { direct: "Direct answer", classification: "Answer status", confirm: "What the sources confirm", use: "How to use this information", why: "Why this query matters", limits: "Known limits", nextCheck: "Next verification", filter: "Source filter", note: "Evidence note", sources: "Sources", checked: "Last checked", version: "Patch 1.0.8", caveat: "Community routes, exact values and live platform data can change by build.", types: { confirmed: "Current answer", "tested-route": "Community-tested route", "community-lead": "Community lead", "not-announced": "Not announced as of the check date", "no-universal-answer": "No universal answer", "source-conflict": "Official source conflict" } },
+    ja: { direct: "直接回答", classification: "回答ステータス", confirm: "出典が確認すること", use: "この情報の使い方", why: "この検索が重要な理由", limits: "確認できない範囲", nextCheck: "次回の確認", filter: "出典フィルター", note: "証拠メモ", sources: "出典", checked: "最終確認", version: "PATCH 1.0.8", caveat: "コミュニティのルート、正確な数値、ライブのプラットフォーム情報はビルドで変わる可能性があります。", types: { confirmed: "現時点の回答", "tested-route": "プレイヤー実測ルート", "community-lead": "コミュニティの手がかり", "not-announced": "確認日現在、公式発表なし", "no-universal-answer": "一律の答えなし", "source-conflict": "公式情報の相違" } },
+    ko: { direct: "직접 답변", classification: "답변 상태", confirm: "출처가 확인하는 내용", use: "이 정보를 사용하는 방법", why: "이 검색이 중요한 이유", limits: "확인되지 않은 범위", nextCheck: "다음 확인", filter: "출처 필터", note: "근거 메모", sources: "출처", checked: "최종 확인", version: "PATCH 1.0.8", caveat: "커뮤니티 경로, 정확한 값과 실시간 플랫폼 정보는 빌드에 따라 달라질 수 있습니다.", types: { confirmed: "현재 답변", "tested-route": "플레이어 테스트 경로", "community-lead": "커뮤니티 단서", "not-announced": "확인일 현재 공식 발표 없음", "no-universal-answer": "하나의 정답 없음", "source-conflict": "공식 출처 충돌" } },
+    fr: { direct: "Réponse directe", classification: "Statut de la réponse", confirm: "Ce que confirment les sources", use: "Comment utiliser cette information", why: "Pourquoi cette recherche compte", limits: "Limites connues", nextCheck: "Prochaine vérification", filter: "Filtre des sources", note: "Note de preuve", sources: "Sources", checked: "Dernière vérification", version: "PATCH 1.0.8", caveat: "Les routes communautaires, valeurs exactes et données de plateforme en direct peuvent changer selon la version.", types: { confirmed: "Réponse actuelle", "tested-route": "Route testée par des joueurs", "community-lead": "Piste communautaire", "not-announced": "Non annoncé à la date du contrôle", "no-universal-answer": "Pas de réponse universelle", "source-conflict": "Conflit entre sources officielles" } },
   }[locale];
   return (
     <>
@@ -11,6 +11,7 @@ export function KeywordBody({ page, locale = "en" }) {
         <span className="kicker">{labels.direct}</span>
         <p>{page.answer}</p>
         <div className={`evidence-badge evidence-${page.evidence}`}><span>{page.evidenceLabel}</span><small>{page.evidenceDescription}</small></div>
+        <div className="answer-status"><span>{labels.classification}</span><strong>{labels.types[page.answerType]}</strong></div>
       </div>
       <section>
         <h2>{labels.confirm}</h2>
@@ -23,6 +24,14 @@ export function KeywordBody({ page, locale = "en" }) {
       <section>
         <h2>{labels.why}</h2>
         <p>{page.context}</p>
+      </section>
+      <section className="known-limits">
+        <h2>{labels.limits}</h2>
+        <p>{page.pending}</p>
+      </section>
+      <section className="next-verification">
+        <h2>{labels.nextCheck}</h2>
+        <p>{page.revisit}</p>
       </section>
       <section>
         <h2>{labels.filter}</h2>

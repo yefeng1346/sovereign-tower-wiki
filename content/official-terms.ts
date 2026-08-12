@@ -33,6 +33,7 @@ export function officialTerm(locale: Locale, key: OfficialTermKey) {
 
 const textReplacements: Record<Exclude<Locale, "en">, Array<[string, string]>> = {
   ja: [
+    ["not fully documented", "完全には文書化されていません"], ["unverified details", "未検証の詳細"],
     ["Witch's Alchemy Room", officialTerms.alchemyRoom.ja], ["Carina's Forge", officialTerms.forge.ja],
     ["Round Table", officialTerms.roundTable.ja], ["Unexpected Outcome", officialTerms.unexpectedOutcome.ja],
     ["Critical Success", "大成功"], ["Critical Failure", "大失敗"], ["Knights", officialTerms.knights.ja],
@@ -44,6 +45,7 @@ const textReplacements: Record<Exclude<Locale, "en">, Array<[string, string]>> =
     ["romance", officialTerms.romance.ja],
   ],
   ko: [
+    ["not fully documented", "완전히 문서화되지 않았습니다"], ["unverified details", "검증되지 않은 세부 정보"],
     ["Witch's Alchemy Room", officialTerms.alchemyRoom.ko], ["Carina's Forge", officialTerms.forge.ko],
     ["Round Table", officialTerms.roundTable.ko], ["Unexpected Outcome", officialTerms.unexpectedOutcome.ko],
     ["Critical Success", "대성공"], ["Critical Failure", "치명적 실패"], ["Knights", officialTerms.knights.ko],
@@ -55,6 +57,7 @@ const textReplacements: Record<Exclude<Locale, "en">, Array<[string, string]>> =
     ["romance", officialTerms.romance.ko],
   ],
   fr: [
+    ["not fully documented", "n'est pas entièrement documenté"], ["unverified details", "détails non vérifiés"],
     ["Witch's Alchemy Room", officialTerms.alchemyRoom.fr], ["Carina's Forge", officialTerms.forge.fr],
     ["Round Table", officialTerms.roundTable.fr], ["Unexpected Outcome", officialTerms.unexpectedOutcome.fr],
     ["Critical Success", "réussite critique"], ["Critical Failure", "échec critique"], ["Knights", officialTerms.knights.fr],

@@ -3,6 +3,7 @@ node_modules/
 .next/
 out/
 *.tsbuildinfo
+.seo-cache/
 
 # Local environment and editor files
 .env

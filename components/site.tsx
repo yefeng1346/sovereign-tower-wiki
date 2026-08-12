@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArticleStructuredData, SiteStructuredData } from "@/components/structured-data";
-import { keywordPages, researchSnapshot, type KeywordPage } from "@/content/keyword-pages";
+import { keywordPages, relatedKeywordPages, researchSnapshot, type KeywordPage } from "@/content/keyword-pages";
 import { KeywordBody } from "@/content/keyword-body.mdx";
 import { localizedKeywordPage } from "@/content/localized-keyword-pages";
 import {
@@ -177,7 +177,7 @@ export function ClassIndexView({ locale }: { locale: Locale }) {
 
 export function KeywordIndexView({ locale }: { locale: Locale }) {
   const l = ui[locale];
-  const localizedPages = keywordPages.map((page) => localizedKeywordPage(locale, page));
+  const localizedPages = keywordPages.filter((page) => page.indexable).map((page) => localizedKeywordPage(locale, page));
   const groups = [...new Set(localizedPages.map((page) => page.category))];
   return <>
     <section className="page-intro section-border"><div className="container page-intro-grid"><div><div className="eyebrow">{l.keywordIndex}<span className="eyebrow-slash">//</span><span>{l.researchedSourceFiltered}</span></div><h1>{l.oneSearch}<br /><span className="accent-text">{l.oneFieldPage}</span></h1><p>{l.keywordIndexDescription}</p></div><div className="index-counter hud-frame"><strong>{localizedPages.length}</strong><span>{l.keywordPages}</span><div className="counter-line" /><small>{l.officialCommunity}</small></div></div></section>
@@ -192,7 +192,7 @@ export function KeywordArticleView({ locale, page }: { locale: Locale; page: Key
   const l = ui[locale];
   const sourcePage = page;
   page = localizedKeywordPage(locale, sourcePage);
-  const related = keywordPages.filter((candidate) => candidate.category === sourcePage.category && candidate.slug !== sourcePage.slug).slice(0, 3).map((candidate) => localizedKeywordPage(locale, candidate));
+  const related = relatedKeywordPages(sourcePage).map((candidate) => localizedKeywordPage(locale, candidate));
   return <>
     <ArticleStructuredData title={page.title} description={page.description} path={localizedPath(locale, `/guides/${page.slug}`)} breadcrumb={page.category} />
     <section className="article-hero keyword-hero section-border"><div className="container"><Link className="back-link" href={hrefFor(locale, "/guides")}><Icon name="back" size={14} />{l.backToKeywordIndex}</Link><div className="article-grid"><div><div className="eyebrow">{page.category}<span className="eyebrow-slash">//</span>{l.keywordPage}</div><h1>{page.keyword}</h1><p className="article-lede">{page.answer}</p><div className="article-meta"><span><Icon name="book" size={14} /> {page.sources.length} {l.sourceLinks}</span><span><Icon name="radio" size={14} /> {l.lastChecked} · {researchSnapshot.compact}</span><span className={`status-chip evidence-chip evidence-${page.evidence}`}>{page.evidenceLabel}</span></div></div><aside className="article-stamp hud-frame"><span>{l.keywordPage}</span><strong>{l.fieldPage}</strong><small>{l.factsFirst}<br />{l.noFabricatedCodes}</small></aside></div></div></section>
