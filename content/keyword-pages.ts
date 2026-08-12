@@ -27,11 +27,9 @@ export type KeywordPage = KeywordDraft & {
   lastChecked: string;
 };
 
-export const researchSnapshot = {
-  date: "August 12, 2026",
-  build: "Patch 1.0.8",
-  compact: "AUG 12, 2026 · PATCH 1.0.8",
-} as const;
+import { researchSnapshot } from "@/lib/research-snapshot";
+
+export { researchSnapshot } from "@/lib/research-snapshot";
 
 export const evidenceLabels: Record<EvidenceLevel, { label: string; description: string }> = {
   official: { label: "Official", description: "Published by the developer, publisher or Steam listing." },

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { keywordPages } from "@/content/keyword-pages";
+import { localizedKeywordPage } from "@/content/localized-keyword-pages";
 import { categories, copy, guideMeta, type Locale } from "@/lib/site-data";
 import { localizedCategory, localizedGuideMeta, ui } from "@/lib/localized-content";
 import { Icon } from "@/components/site";
@@ -56,16 +57,14 @@ export function FaqView({ locale }: { locale: Locale }) {
 
 export function SearchView({ locale, query = "" }: { locale: Locale; query?: string }) {
   const l = ui[locale];
-  if (locale !== "en") {
-    return <>
-      <section className="page-intro section-border"><div className="container page-intro-grid"><div><div className="eyebrow">{l.searchEyebrow}<span className="eyebrow-slash">//</span><span>{l.keywordIndex}</span></div><h1>{l.searchTitleA}<br /><span className="accent-text">{l.searchTitleB}</span></h1><p>{l.searchDescription}</p></div><div className="index-counter hud-frame"><strong>—</strong><span>{l.localizedKeywordTitle}</span><div className="counter-line" /><small>{l.officialCommunity}</small></div></div></section>
-      <section className="section"><div className="container search-layout"><div className="search-directory"><form className="search-form" action={hrefFor(locale, "/search")}><label htmlFor="site-search">{l.searchFieldIndex}</label><div><input id="site-search" name="q" defaultValue={query} placeholder={l.searchPlaceholder} /><button type="submit">{l.searchButton} <Icon name="arrow" size={13} /></button></div></form><div className="localized-hold hud-frame"><span className="kicker">{l.keywordIndex}</span><h2>{l.localizedKeywordTitle}</h2><p>{l.localizedKeywordDescription}</p><p>{l.localizedKeywordNotice}</p><Link className="text-link" href={hrefFor(locale, "/classes")}>{l.browseGuides}<Icon name="arrow" size={14} /></Link></div></div><aside className="article-sidebar"><div className="sidebar-card hud-frame"><span className="kicker">{l.coreFiles}</span>{Object.entries(guideMeta).map(([slug]) => { const guide = localizedGuideMeta(locale, slug as keyof typeof guideMeta); return <Link className="next-card-link" href={hrefFor(locale, `/classes/${slug}`)} key={slug}>{guide.title}<Icon name="arrow" size={13} /></Link>; })}</div><div className="sidebar-card hud-frame"><span className="kicker">{tOrLocale(locale, "categories")}</span>{categories.map((baseCategory) => { const category = localizedCategory(locale, baseCategory.slug) ?? baseCategory; return <Link className="next-card-link" href={hrefFor(locale, `/classes/${baseCategory.slug === "quests" ? "quest-matching" : baseCategory.slug}`)} key={baseCategory.slug}>{category.title}<Icon name="arrow" size={13} /></Link>; })}</div></aside></div></section>
-    </>;
-  }
-  const indexablePages = keywordPages.filter((page) => page.indexable);
+  const indexablePages = keywordPages.filter((page) => page.indexable).map((page) => localizedKeywordPage(locale, page));
   const groups = [...new Set(indexablePages.map((page) => page.category))];
-  const normalizedQuery = query.trim().toLowerCase();
-  const visiblePages = normalizedQuery ? indexablePages.filter((page) => `${page.keyword} ${page.answer} ${page.category}`.toLowerCase().includes(normalizedQuery)) : indexablePages;
+  const normalizedQuery = query.trim().toLocaleLowerCase(locale);
+  const visiblePages = normalizedQuery ? indexablePages.filter((page) => {
+    const sourcePage = keywordPages.find((candidate) => candidate.slug === page.slug);
+    const searchableText = `${page.keyword} ${page.answer} ${page.category} ${sourcePage?.keyword ?? ""} ${sourcePage?.answer ?? ""} ${sourcePage?.category ?? ""}`;
+    return searchableText.toLocaleLowerCase(locale).includes(normalizedQuery);
+  }) : indexablePages;
   const visibleGroups = [...new Set(visiblePages.map((page) => page.category))];
   return <>
     <section className="page-intro section-border"><div className="container page-intro-grid"><div><div className="eyebrow">{l.searchEyebrow}<span className="eyebrow-slash">//</span><span>{l.keywordIndex}</span></div><h1>{l.searchTitleA}<br /><span className="accent-text">{l.searchTitleB}</span></h1><p>{l.searchDescription}</p></div><div className="index-counter hud-frame"><strong>{indexablePages.length}</strong><span>{l.indexedQueries}</span><div className="counter-line" /><small>{l.officialCommunity}</small></div></div></section>

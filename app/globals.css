@@ -294,6 +294,12 @@ button, summary { cursor: pointer; }
 .legal-card .eyebrow { margin-top: 48px; }
 .legal-card h1 { margin: 15px 0 0; font: 500 clamp(40px, 6vw, 72px)/1 var(--display); letter-spacing: .06em; text-transform: uppercase; }
 .legal-card p { max-width: 680px; margin: 25px 0 0; color: var(--camo-300); font-size: 15px; line-height: 1.7; }
+.legal-card .legal-intro { color: var(--sand-100); font-size: 18px; line-height: 1.65; }
+.legal-meta { color: var(--ember-400) !important; font: 10px/1.5 var(--mono) !important; letter-spacing: .08em; text-transform: uppercase; }
+.legal-sections { display: grid; gap: 24px; margin-top: 38px; max-width: 680px; }
+.legal-sections section { padding-top: 22px; border-top: 1px solid var(--camo-800); }
+.legal-sections h2 { margin: 0; color: var(--sand-100); font: 500 24px/1.12 var(--display); letter-spacing: .04em; text-transform: uppercase; }
+.legal-sections p { margin-top: 10px; }
 .legal-note { padding-top: 18px; border-top: 1px solid var(--camo-900); font-family: var(--mono); font-size: 12px !important; }
 .accent-text { color: var(--ember-500); }
 .keyword-group + .keyword-group { margin-top: 76px; }

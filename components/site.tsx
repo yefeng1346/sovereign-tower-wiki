@@ -22,6 +22,7 @@ import {
 } from "@/lib/site-data";
 import { localizedCategory, localizedCategoryDetail, localizedFooterLinks, localizedGuideMeta, localizedJourney, localizedSpotlight, localizedStats, ui } from "@/lib/localized-content";
 import { localizedPath } from "@/lib/site-seo";
+import { getLegalCopy } from "@/content/legal-copy";
 
 function hrefFor(locale: Locale, href: string) {
   if (href.startsWith("http")) return href;
@@ -124,7 +125,16 @@ export function LegalView({ locale, kind }: { locale: Locale; kind: "privacy" | 
   const t = copy[locale];
   const l = ui[locale];
   const title = kind === "privacy" ? t.privacyPolicy : t.termsOfService;
-  return <section className="legal-page section-border"><div className="container legal-card hud-frame"><Link className="back-link" href={hrefFor(locale, "/")}><Icon name="back" size={14} />{t.legalBack}</Link><div className="eyebrow">Sovereign Tower Wiki<span className="eyebrow-slash">//</span>{title}</div><h1>{title}</h1><p>{t.legalPending}</p><p className="legal-note">{l.scopeLabel}: {l.scopeDescription}</p></div></section>;
+  const document = getLegalCopy(locale, kind);
+  return <section className="legal-page section-border"><div className="container legal-card hud-frame">
+    <Link className="back-link" href={hrefFor(locale, "/")}><Icon name="back" size={14} />{t.legalBack}</Link>
+    <div className="eyebrow">Sovereign Tower Wiki<span className="eyebrow-slash">//</span>{title}</div>
+    <h1>{title}</h1>
+    <p className="legal-intro">{document.intro}</p>
+    <p className="legal-meta">{document.updated} · {document.notice}</p>
+    <div className="legal-sections">{document.sections.map((section) => <section key={section.heading}><h2>{section.heading}</h2><p>{section.body}</p></section>)}</div>
+    <p className="legal-note">{l.scopeLabel}: {l.scopeDescription}</p>
+  </div></section>;
 }
 
 export function HomeView({ locale }: { locale: Locale }) {

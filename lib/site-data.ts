@@ -1,3 +1,5 @@
+import { researchSnapshot } from "@/lib/research-snapshot";
+
 export const locales = ["en", "ja", "ko", "fr"] as const;
 export type Locale = (typeof locales)[number];
 
@@ -134,7 +136,7 @@ type Copy = {
 
 const englishCopy: Copy = {
   signal: "SIGNAL · LIVE",
-  liveBuild: "PATCH 1.0.8 · AUG 10, 2026",
+  liveBuild: `${researchSnapshot.buildLabel} · AUG 10, 2026`,
   unofficial: "FAN-MADE CODEX",
   nav: { knights: "Knights", quests: "Quests", systems: "Systems", choices: "Choices", guides: "Guides", news: "News", faq: "FAQ" },
   search: "Search",
@@ -165,7 +167,7 @@ const englishCopy: Copy = {
   codesTitle: "No confirmed codes",
   codesDescription: "No reliable official Sovereign Tower redemption codes were found in the researched materials. We will not list third-party claims here.",
   codesStatus: "暂无",
-  codesSource: "No official codes found · checked Aug 12, 2026",
+  codesSource: `No official codes found · checked ${researchSnapshot.dateShort}`,
   finalEyebrow: "Ready for the tower?",
   finalTitle: "Ready to Master Sovereign Tower?",
   finalDescription: "From your first audience at the throne to difficult Knight assignments, faction politics and rewritten timelines, our Sovereign Tower Wiki helps you understand every major system and make better decisions throughout your reign.",
@@ -191,7 +193,7 @@ const englishCopy: Copy = {
   articleTitleB: "Stats, Risks & Unexpected Outcomes",
   articleLede: "How to read Knight stats, affinity and quest risk before dispatching a team in Sovereign Tower.",
   articleBack: "Back to archive",
-  articleUpdated: "Updated Aug 12, 2026 · Patch 1.0.8",
+  articleUpdated: `Updated ${researchSnapshot.dateShort} · ${researchSnapshot.build}`,
   atAGlance: "At a glance",
   nextCoordinates: "Next coordinates",
   codes: "Codes",
