@@ -1,4 +1,5 @@
 import { officialLinks } from "@/lib/site-data";
+import { researchSnapshot } from "@/lib/research-snapshot";
 import { absoluteUrl, siteIdentity, siteUrl } from "@/lib/site-seo";
 
 export function StructuredData({ data }: { data: Record<string, unknown> }) {
@@ -31,25 +32,29 @@ export function ArticleStructuredData({
   title,
   description,
   path,
-  dateModified = "2026-08-12",
+  dateModified = researchSnapshot.isoDate,
+  datePublished,
+  pageType = "Article",
   breadcrumb,
 }: {
   title: string;
   description: string;
   path: string;
   dateModified?: string;
+  datePublished?: string;
+  pageType?: "Article" | "WebPage";
   breadcrumb?: string;
 }) {
   const articleUrl = absoluteUrl(path);
   return <>
     <StructuredData data={{
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": pageType,
       headline: title,
       description,
       url: articleUrl,
-      datePublished: "2026-08-12",
       dateModified,
+      ...(datePublished ? { datePublished } : {}),
       author: { "@type": "Organization", name: siteIdentity.name, url: siteUrl.toString() },
       publisher: { "@type": "Organization", name: siteIdentity.name, logo: { "@type": "ImageObject", url: siteIdentity.logo } },
       isPartOf: { "@type": "WebSite", name: siteIdentity.name, url: siteUrl.toString() },

@@ -22,6 +22,7 @@ import {
 } from "@/lib/site-data";
 import { localizedCategory, localizedCategoryDetail, localizedFooterLinks, localizedGuideMeta, localizedJourney, localizedSpotlight, localizedStats, ui } from "@/lib/localized-content";
 import { localizedPath } from "@/lib/site-seo";
+import { getClassSeo } from "@/lib/seo-copy";
 import { getLegalCopy } from "@/content/legal-copy";
 
 function hrefFor(locale: Locale, href: string) {
@@ -71,7 +72,7 @@ export function Header({ locale }: { locale: Locale }) {
       </div>
       <div className="nav-bar container">
         <Link className="brand" href={hrefFor(locale, "/")} aria-label={l.homeAria}>
-          <span className="brand-mark"><img src="/android-chrome-512x512.png" alt="" /></span>
+          <span className="brand-mark"><img src="/android-chrome-512x512.png" alt={l.logoAlt} /></span>
           <span className="brand-copy"><span className="brand-name">Sovereign Tower</span><span className="brand-sub">{l.brandSub}</span></span>
         </Link>
         <nav className="desktop-nav" aria-label={l.primaryNavigation}>
@@ -106,7 +107,7 @@ export function Footer({ locale }: { locale: Locale }) {
     <footer className="site-footer">
       <div className="stencil-line" />
       <div className="container footer-grid">
-        <div className="footer-about"><div className="brand footer-brand"><span className="brand-mark small"><img src="/android-chrome-512x512.png" alt="" /></span><span className="brand-copy"><span className="brand-name">Sovereign Tower</span><span className="brand-sub">{l.brandSub}</span></span></div><p>{t.footerAbout}</p><p className="footer-disclaimer">{t.footerDisclaimer}</p></div>
+        <div className="footer-about"><div className="brand footer-brand"><span className="brand-mark small"><img src="/android-chrome-512x512.png" alt={l.logoAlt} /></span><span className="brand-copy"><span className="brand-name">Sovereign Tower</span><span className="brand-sub">{l.brandSub}</span></span></div><p>{t.footerAbout}</p><p className="footer-disclaimer">{t.footerDisclaimer}</p></div>
         <div><h4>{t.codex}</h4><ul>{links.codex.map((item) => <li key={item.href}><Link href={hrefFor(locale, item.href)}>{item.label}</Link></li>)}</ul></div>
         <div><h4>{t.players}</h4><ul>{links.players.map((item) => <li key={item.href}><Link href={hrefFor(locale, item.href)}>{item.label}{item.href.startsWith("http") && <Icon name="external" size={11} />}</Link></li>)}</ul></div>
         <div><h4>{t.official}</h4><ul>{links.official.map((item) => <li key={item.href}><a href={item.href} target="_blank" rel="noreferrer">{item.label}<Icon name="external" size={11} /></a></li>)}</ul></div>
@@ -215,6 +216,7 @@ export function CategoryDetailView({ locale, slug }: { locale: Locale; slug: str
   const l = ui[locale];
   const category = localizedCategory(locale, slug);
   if (!category) return null;
+  const categorySeo = getClassSeo(locale, slug);
   const contentBySlug: Record<string, { label: string; title: string; paragraphs: string[] }> = {
     knights: { label: "CHARACTER DOSSIER", title: "Recruit, train, equip and dispatch Knights.", paragraphs: ["Each Knight has different stats, positive and negative traits, preferences, relationships and personal story. They are not only numbers; they affect how a quest can unfold.", "The official material confirms Knight management and quest assignment. Complete recruitment, evolution and route conditions are not fully documented where the public sources do not agree."] },
     systems: { label: "SYSTEM DOSSIER", title: "Round Table, Annexes, affinity and time rewind.", paragraphs: ["The confirmed gameplay loop includes managing the Round Table, assigning quests, balancing relationships, expanding the Tower through Annexes and using the Demon to rewind time.", "The exact balance values and some formal system thresholds are version-sensitive and should be checked against the current Steam build."] },
@@ -230,9 +232,9 @@ export function CategoryDetailView({ locale, slug }: { locale: Locale; slug: str
   };
   const related = categories.filter((item) => item.slug !== slug).slice(0, 3);
   return <>
-    <ArticleStructuredData title={`${category.title} — Sovereign Tower Wiki`} description={category.description} path={localizedPath(locale, `/classes/${slug}`)} breadcrumb={category.title} />
+    <ArticleStructuredData title={categorySeo?.title ?? `${category.title} — Sovereign Tower Wiki`} description={categorySeo?.description ?? category.description} path={localizedPath(locale, `/classes/${slug}`)} pageType="WebPage" breadcrumb={category.title} />
     <section className="article-hero category-hero section-border"><div className="container"><Link className="back-link" href={hrefFor(locale, "/classes")}><Icon name="back" size={14} />{t.articleBack}</Link><div className="article-grid"><div><div className="eyebrow">{detail.label}<span className="eyebrow-slash">//</span>{category.code}</div><h1>{category.title}<br /><span>{detail.title}</span></h1><p className="article-lede">{category.description}</p><div className="article-meta"><span><Icon name={category.icon} size={14} /> {l.categorySourceLabelled}</span><span><Icon name="radio" size={14} /> {l.lastChecked} · {researchSnapshot.compact}</span></div></div><aside className="article-stamp hud-frame"><span>{category.code}</span><strong>{category.tag.split(" ").map((part) => <span key={part}>{part}<br /></span>)}</strong><small>{l.confirmedForLaunch}</small></aside></div></div></section>
-    <section className="section"><div className="container category-layout"><article className="category-copy"><span className="kicker">{t.dossier} · {category.code}</span><h2>{detail.title}</h2>{detail.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}<div className="category-notes hud-frame"><span className="kicker">{l.fieldNote}</span><strong>{l.fieldNoteTitle}</strong><p>{l.fieldNoteDescription}</p></div></article><aside className="article-sidebar"><div className="sidebar-card hud-frame"><span className="kicker">{t.nextCoordinates}</span>{related.map((item) => { const relatedCategory = localizedCategory(locale, item.slug) ?? item; return <Link key={item.slug} href={hrefFor(locale, `/classes/${item.slug === "quests" ? "quest-matching" : item.slug}`)}>{relatedCategory.title} <Icon name="arrow" size={13} /></Link>; })}</div></aside></div></section>
+    <section className="section"><div className="container category-layout"><article className="category-copy"><span className="kicker">{t.dossier} · {category.code}</span><h2>{detail.title}</h2>{detail.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}<div className="category-notes hud-frame"><span className="kicker">{l.fieldNote}</span><h3>{l.fieldNoteTitle}</h3><p>{l.fieldNoteDescription}</p></div></article><aside className="article-sidebar"><div className="sidebar-card hud-frame"><span className="kicker">{t.nextCoordinates}</span>{related.map((item) => { const relatedCategory = localizedCategory(locale, item.slug) ?? item; return <Link key={item.slug} href={hrefFor(locale, `/classes/${item.slug === "quests" ? "quest-matching" : item.slug}`)}>{relatedCategory.title} <Icon name="arrow" size={13} /></Link>; })}</div></aside></div></section>
   </>;
 }
 

@@ -100,7 +100,9 @@ function createPage(locale: Exclude<Locale, "en">, page: KeywordPage, data: Omit
   };
   const titleTail = data.title.includes(" — ") ? data.title.slice(data.title.indexOf(" — ") + 3) : data.title;
   const titleSuffix = locale === "ja" ? " · 出典付き攻略" : locale === "ko" ? " · 출처 기반 공략" : " · guide sourcé";
-  const titleBase = `${localizeKeyword(locale, page.keyword)} — ${localizeOfficialText(locale, titleTail)}`;
+  const isGoose = page.keyword === "Sovereign Tower Goose";
+  const gooseTitle = locale === "ja" ? "Sovereign Tower Goose — Clean Keeper Goose 攻略" : locale === "ko" ? "Sovereign Tower Goose — Clean Keeper Goose 공략" : "Sovereign Tower Goose — Guide Clean Keeper Goose";
+  const titleBase = isGoose ? gooseTitle : `${localizeKeyword(locale, page.keyword)} — ${localizeOfficialText(locale, titleTail)}`;
   let localizedTitle = titleBase;
   if (localizedTitle.length < 40) localizedTitle += titleSuffix;
   if (localizedTitle.length < 40) localizedTitle += (locale === "ja" ? " · 現行版" : locale === "ko" ? " · 최신 정보" : " · version actuelle");

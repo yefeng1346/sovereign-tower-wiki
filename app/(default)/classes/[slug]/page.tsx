@@ -7,6 +7,7 @@ import { categories, guideMeta } from "@/lib/site-data";
 import SystemRequirements from "../../../../content/guides/system-requirements.mdx";
 import QuestMatchingGuide from "../../../../content/guides/quest-matching.mdx";
 import { pageMetadata } from "@/lib/site-seo";
+import { getClassSeo } from "@/lib/seo-copy";
 
 export function generateStaticParams() {
   return [{ slug: "quest-matching" }, { slug: "beginner-guide" }, { slug: "patch-1-0-8" }, { slug: "achievements" }, { slug: "system-requirements" }, ...categories.filter((category) => category.slug !== "quests").map((category) => ({ slug: category.slug }))];
@@ -16,8 +17,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const guide = guideMeta[slug as keyof typeof guideMeta];
   const category = categories.find((item) => item.slug === slug);
-  if (guide) return pageMetadata({ locale: "en", path: `/classes/${slug}`, title: `${guide.title} — Sovereign Tower Wiki`, description: guide.description, type: "article" });
-  return category ? pageMetadata({ locale: "en", path: `/classes/${slug}`, title: `${category.title} — Sovereign Tower Wiki`, description: category.description, type: "article" }) : {};
+  const seo = getClassSeo("en", slug);
+  if (guide) return pageMetadata({ locale: "en", path: `/classes/${slug}`, title: seo?.title ?? `${guide.title} — Sovereign Tower Wiki`, description: seo?.description ?? guide.description, type: "article" });
+  return category ? pageMetadata({ locale: "en", path: `/classes/${slug}`, title: seo?.title ?? `${category.title} — Sovereign Tower Wiki`, description: seo?.description ?? category.description, type: "website" }) : {};
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {

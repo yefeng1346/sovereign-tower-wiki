@@ -1,5 +1,6 @@
 export const researchSnapshot = {
   date: "August 12, 2026",
+  isoDate: "2026-08-12",
   dateShort: "AUG 12, 2026",
   dateJa: "2026年8月12日",
   dateKo: "2026년 8월 12일",

@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/site-seo";
 import { LocalizedGuideContent } from "../../../../content/guides/localized-guides";
 import { localizedCategory, localizedGuideMeta } from "@/lib/localized-content";
+import { getClassSeo } from "@/lib/seo-copy";
 
 export function generateStaticParams() {
   const core = ["quest-matching", "beginner-guide", "patch-1-0-8", "achievements", "system-requirements"];
@@ -20,11 +21,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale, slug } = await params;
   const guide = guideMeta[slug as keyof typeof guideMeta];
   const category = localizedCategory(locale as Locale, slug);
+  const seo = getClassSeo(locale as Locale, slug);
   if (guide) {
     const localizedGuide = localizedGuideMeta(locale as Locale, slug as keyof typeof guideMeta);
-    return pageMetadata({ locale: locale as Locale, path: `/classes/${slug}`, title: `${localizedGuide.title} — Sovereign Tower Wiki`, description: localizedGuide.description, type: "article" });
+    return pageMetadata({ locale: locale as Locale, path: `/classes/${slug}`, title: seo?.title ?? `${localizedGuide.title} — Sovereign Tower Wiki`, description: seo?.description ?? localizedGuide.description, type: "article" });
   }
-  return category ? pageMetadata({ locale: locale as Locale, path: `/classes/${slug}`, title: `${category.title} — Sovereign Tower Wiki`, description: category.description, type: "article" }) : {};
+  return category ? pageMetadata({ locale: locale as Locale, path: `/classes/${slug}`, title: seo?.title ?? `${category.title} — Sovereign Tower Wiki`, description: seo?.description ?? category.description, type: "website" }) : {};
 }
 
 export default async function LocalizedArticle({ params }: { params: Promise<{ locale: string; slug: string }> }) {

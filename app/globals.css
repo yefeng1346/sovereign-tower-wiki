@@ -239,7 +239,7 @@ button, summary { cursor: pointer; }
 .category-copy h2 { margin: 13px 0 20px; color: var(--sand-100); font: 500 32px/1.08 var(--display); letter-spacing: .07em; text-transform: uppercase; }
 .category-copy p { margin: 0 0 18px; }
 .category-notes { padding: 18px; margin-top: 34px; }
-.category-notes strong { display: block; margin-top: 12px; color: var(--sand-100); font: 19px/1.1 var(--display); letter-spacing: .06em; text-transform: uppercase; }
+.category-notes h3 { margin: 12px 0 0; color: var(--sand-100); font: 19px/1.1 var(--display); letter-spacing: .06em; text-transform: uppercase; }
 .category-notes p { margin: 9px 0 0; color: var(--camo-300); font-size: 13px; line-height: 1.55; }
 .sidebar-card { padding: 17px; }
 .evidence-sidebar-label { display: block; margin-top: 10px; color: var(--sand-100); font: 19px/1.08 var(--display); letter-spacing: .05em; text-transform: uppercase; }
