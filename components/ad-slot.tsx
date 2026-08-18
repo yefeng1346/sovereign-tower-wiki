@@ -1,7 +1,7 @@
 import Script from "next/script";
 
 const adScriptId = "ec90b4a9b07bc944e1e5ea1e5da73254";
-const adScriptSrc = "https://pl30892849.effectivecpmnetwork.com/ec90b4a9b07bc944e1e5ea1e5da73254/invoke.js";
+const adScriptSrc = "https://staffresumed.com/ec90b4a9b07bc944e1e5ea1e5da73254/invoke.js";
 
 export function AdSlot() {
   return (
