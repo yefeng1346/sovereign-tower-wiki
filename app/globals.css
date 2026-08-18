@@ -31,6 +31,9 @@ button, summary { cursor: pointer; }
 .container { width: min(100% - 32px, 1180px); margin-inline: auto; }
 .site-main, .site-header, .site-footer { position: relative; z-index: 1; }
 .section-border { border-bottom: 1px solid hsla(349, 31%, 43%, .22); }
+.ad-slot { min-height: 90px; padding: 16px 0 18px; background: hsla(349, 40%, 64%, .045); }
+.ad-slot-label { display: block; margin-bottom: 8px; color: var(--camo-500); font: 8px/1 var(--mono); letter-spacing: .16em; text-align: center; text-transform: uppercase; }
+.ad-slot > .container > div { min-height: 48px; }
 .status-bar { border-bottom: 1px solid hsla(349, 31%, 43%, .18); background: hsla(36, 28%, 96%, .78); }
 .status-inner { min-height: 26px; display: flex; align-items: center; justify-content: space-between; color: var(--camo-500); font: 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
 .status-left, .status-right { display: flex; align-items: center; gap: 11px; }
