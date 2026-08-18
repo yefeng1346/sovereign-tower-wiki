@@ -24,6 +24,7 @@ import { localizedCategory, localizedCategoryDetail, localizedFooterLinks, local
 import { localizedPath } from "@/lib/site-seo";
 import { getClassSeo } from "@/lib/seo-copy";
 import { getLegalCopy } from "@/content/legal-copy";
+import { AdSlot } from "@/components/ad-slot";
 
 function hrefFor(locale: Locale, href: string) {
   if (href.startsWith("http")) return href;
@@ -119,7 +120,7 @@ export function Footer({ locale }: { locale: Locale }) {
 }
 
 export function SiteShell({ locale, children }: { locale: Locale; children: ReactNode }) {
-  return <><SiteStructuredData /><Header locale={locale} /><main lang={locale} className="site-main">{children}</main><Footer locale={locale} /></>;
+  return <><SiteStructuredData /><Header locale={locale} /><AdSlot /><main lang={locale} className="site-main">{children}</main><Footer locale={locale} /></>;
 }
 
 export function LegalView({ locale, kind }: { locale: Locale; kind: "privacy" | "terms" }) {
